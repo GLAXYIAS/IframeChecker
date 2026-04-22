@@ -8,69 +8,86 @@
 </head>
 <body>
 
-    <h2>Iframe Tester</h2>
+    <h2>Iframe Checker</h2>
+    
     <div class="controls">
         <div class="input-group">
-            <input type="text" id="urlInput" placeholder="https://example.com" onkeypress="if(event.key === 'Enter') startTest()">
-            <button onclick="startTest()">Test Iframe</button>
+            <input type="text" id="urlInput" placeholder="https://example.com" onkeypress="if(event.key === 'Enter') runScanner()">
+            <button onclick="runScanner()">Start Scan</button>
         </div>
         
         <div class="progress-container" id="progressCont">
             <div class="progress-bar" id="progressBar"></div>
         </div>
+
+        <div id="result-container">
+            <div class="status-msg" id="statusMsg">Ready to scan...</div>
+        </div>
     </div>
 
-    <div id="result-container">
-        <div class="status-msg" id="statusMsg">Loading preview...</div>
+    <div id="preview-area" style="display:none;">
         <div class="preview-box">
             <iframe id="testerFrame"></iframe>
         </div>
-        
-        <p style="font-size: 0.85em; color: #64748b; margin-top: 10px;">
-            <b>Detection:</b> If the box above says "Refused to Connect" or stays blank, the site <b>failed</b> the iframe test.
+        <p style="font-size: 0.85em; color: #94a3b8; text-align: center;">
+            <b>Scan Result:</b> If the box stays blank or shows a "Reset" error, the site is NOT iframeable.
         </p>
     </div>
 
     <script>
-        function startTest() {
+        function runScanner() {
             let url = document.getElementById('urlInput').value.trim();
             if (!url) return;
+            if (!url.startsWith('http')) url = 'https://' + url;
 
-            // Ensure protocol exists
-            if (!url.startsWith('http')) {
-                url = 'https://' + url;
-            }
-
-            const container = document.getElementById('result-container');
+            const resContainer = document.getElementById('result-container');
+            const previewArea = document.getElementById('preview-area');
             const frame = document.getElementById('testerFrame');
             const barCont = document.getElementById('progressCont');
             const bar = document.getElementById('progressBar');
             const msg = document.getElementById('statusMsg');
 
-            // Reset UI
-            container.style.display = 'block';
+            // Setup UI
+            resContainer.style.display = 'block';
+            previewArea.style.display = 'block';
             barCont.style.display = 'block';
-            bar.style.width = '0%';
-            msg.innerText = "Connecting to " + url + "...";
+            frame.src = "about:blank";
             
-            // Start the iframe load
-            frame.src = url;
+            let progress = 0;
+            bar.style.width = '0%';
+            
+            const scanSteps = [
+                "Initializing connection...",
+                "Requesting security headers...",
+                "Analyzing X-Frame-Options...",
+                "Checking Content-Security-Policy...",
+                "Finalizing iframe injection..."
+            ];
 
-            // Fake "Fast" progress
-            setTimeout(() => { bar.style.width = '30%'; }, 100);
-            setTimeout(() => { bar.style.width = '60%'; }, 300);
-            setTimeout(() => { bar.style.width = '90%'; }, 500);
-
-            // When the iframe finishes (either success or the browser's error page)
-            frame.onload = function() {
-                bar.style.width = '100%';
-                msg.innerText = "Test Complete.";
+            // Simulation of a slow scan
+            let step = 0;
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 15) + 5; // Random jump
                 
-                // Hide progress bar after a short delay
-                setTimeout(() => {
-                    barCont.style.display = 'none';
-                }, 500);
-            };
+                if (progress >= 100) {
+                    progress = 100;
+                    bar.style.width = '100%';
+                    msg.innerText = "Scan Complete. Checking rendering...";
+                    frame.src = url; // Only load iframe at the end of the scan
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        barCont.style.display = 'none';
+                    }, 1000);
+                } else {
+                    bar.style.width = progress + '%';
+                    // Update text based on progress
+                    if (progress > step * 20) {
+                        msg.innerText = scanSteps[step];
+                        step++;
+                    }
+                }
+            }, 400); // Speed of the "Scan"
         }
     </script>
 </body>
