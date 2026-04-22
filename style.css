@@ -169,3 +169,81 @@ iframe {
         width: 100%;
     }
 }
+/* style.css */
+body { 
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+    padding: 20px; 
+    line-height: 1.6; 
+    max-width: 900px; 
+    margin: 0 auto; 
+    background: #f8fafc; 
+}
+
+.controls { 
+    background: white; 
+    padding: 25px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+}
+
+.input-group { 
+    display: flex; 
+    gap: 10px; 
+}
+
+input { 
+    flex: 1; 
+    padding: 12px; 
+    border: 2px solid #ddd; 
+    border-radius: 8px; 
+    font-size: 16px;
+}
+
+button { 
+    padding: 12px 24px; 
+    cursor: pointer; 
+    background: #007bff; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: bold; 
+}
+
+/* Progress Bar Styling */
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background: #eee;
+    margin-top: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none; /* Hidden by default */
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #007bff;
+    transition: width 0.3s ease;
+}
+
+#result-container { 
+    margin-top: 25px; 
+    display: none; 
+}
+
+.preview-box { 
+    width: 100%; 
+    height: 600px; 
+    border: 2px solid #e2e8f0; 
+    background: white; 
+    border-radius: 8px; 
+}
+
+iframe { width: 100%; height: 100%; border: none; }
+
+.status-msg {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #475569;
+}
