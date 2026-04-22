@@ -72,7 +72,7 @@
                 if (progress >= 100) {
                     progress = 100;
                     bar.style.width = '100%';
-                    msg.innerText = "Scan Complete. Checking rendering...";
+                    msg.innerText = "Scan Complete.";
                     frame.src = url; // Only load iframe at the end of the scan
                     clearInterval(interval);
                     
